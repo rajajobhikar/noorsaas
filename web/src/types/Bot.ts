@@ -16,4 +16,5 @@ export interface BotStatus {
     description: string;
     verified: boolean;
   }[];
+  auditLogs?: import("@/types/AuditLog").AuditLog[];
 }
