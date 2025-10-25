@@ -10,22 +10,30 @@ export default function AuditDashboard() {
   useAuditSocket(setAuditList);
 
   useEffect(() => {
-    // Optional: fetch initial audits
     fetch("/api/admin/audit")
       .then((res) => res.json())
-      .then((data) => setAuditList(data.logs));
+      .then((data: AuditLog[]) => {
+        console.log("📦 Initial audits:", data); // ✅ Add this
+        setAuditList(data);
+      });
   }, []);
 
   return (
     <div>
       <h1>Audit Logs</h1>
-      <ul>
-        {auditList.map((log, i) => (
-          <li key={i}>
-            {log.action} — {log.actorId}
-          </li>
-        ))}
-      </ul>
+
+        {auditList.length === 0 ? (
+          <p>🚫 No audit logs found</p>
+        ) : (
+          <ul>
+            {auditList.map((log, i) => (
+              <li key={i}>
+                {log.action} — {log.userId} — {log.timestamp}
+              </li>
+            ))}
+          </ul>
+        )}
+
     </div>
   );
 }
