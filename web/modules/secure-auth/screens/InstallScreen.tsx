@@ -30,7 +30,7 @@ export default function InstallScreen({ userId }: { userId: string }) {
     };
 
     setup();
-  }, []);
+  }, [userId]);
 
   return (
     <div style={{ padding: "2rem" }}>

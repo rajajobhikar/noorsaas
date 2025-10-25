@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import FairnessBadge from "@/components/FairnessBadge";
 import { FairnessData } from "@/types/fairness";
 import InstallScreen from "../../../modules/secure-auth/screens/InstallScreen";
-// import AuditMirror from "@/components/AuditMirror";
 
 
 export default function DashboardPage() {
@@ -43,7 +42,7 @@ export default function DashboardPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Welcome to your dashboard</h1>
-      <p className="mt-2">You're logged in and verified ✅</p>
+      <p className="mt-2">You&apos;re logged in and verified ✅</p>
       <p className="mt-2">
         Your serial number: <strong>{serial}</strong>
       </p>

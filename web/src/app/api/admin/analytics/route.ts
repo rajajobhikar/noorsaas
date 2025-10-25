@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { users } from "@/lib-wkt3/wkt3db/userStore";
 import { gameHistory } from "@/lib-wkt3/wkt3db/gameHistoryStore";
+import { users } from "@/lib-wkt3/authEngine/userStore";
 
 export async function GET() {
   const totalUsers = users.length;
@@ -12,6 +12,6 @@ export async function GET() {
     users: totalUsers,
     matches: totalMatches,
     wins,
-    losses,
+    losses, 
   });
 }
