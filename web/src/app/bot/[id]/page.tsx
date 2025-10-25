@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import clientPromise from "@/lib-wkt3/wkt3db/mongo";
 import { BotServiceCard } from "@/components/BotServiceCard";
 import { BotStatus } from "@/types/Bot";
+import { BookBotButton } from "@/components/BookBotButton";
 
 export default async function BotProfile({
   params,
@@ -31,7 +32,7 @@ export default async function BotProfile({
           </p>
         </div>
       </div>
-
+      <BookBotButton botId={bot._id.toString()} />
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Personality</h2>
         <p className="text-sm text-gray-700">
