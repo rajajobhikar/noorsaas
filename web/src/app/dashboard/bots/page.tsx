@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useBotSocket } from "@/lib-wkt3/socket/hooks/useBotSocket";
 import { BotStatus } from "@/types/Bot";
+import { BotCard } from "@/components/BotCard";
 
 export default function BotDashboard() {
   const [bots, setBots] = useState<BotStatus[]>([]);
@@ -27,6 +28,11 @@ export default function BotDashboard() {
               {new Date(b.lastPing).toLocaleTimeString()}
             </li>
           ))}
+          <li>
+            {bots.map((b) => (
+              <BotCard key={b._id} bot={b} />
+            ))}
+          </li>
         </ul>
       )}
     </div>
