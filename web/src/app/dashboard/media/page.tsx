@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { BotStatus } from "@/types/Bot";
-import { BotGalleryCard } from "@/components/BotGalleryCard";
+import Link from "next/link";
 
 export default function MediaDashboard() {
   const [bots, setBots] = useState<BotStatus[]>([]);
@@ -17,7 +17,7 @@ export default function MediaDashboard() {
       <h1 className="text-2xl font-bold">Bot Showcase Gallery</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {bots.map((bot) => (
-          <BotGalleryCard key={bot._id} bot={bot} />
+          <Link key={bot._id} href={`/bot/${bot._id}`}></Link>
         ))}
       </div>
     </div>
