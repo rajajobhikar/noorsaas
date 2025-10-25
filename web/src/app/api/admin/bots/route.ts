@@ -6,5 +6,7 @@ export async function GET() {
   const db = client.db("wkt3db"); // ✅ Confirmed
   const bots = await db.collection("status").find().toArray();
 
-  return NextResponse.json(bots);
+  const serializedBots = bots.map(bot => ({ ...bot, _id: bot._id.toString() }));
+
+  return NextResponse.json(serializedBots);
 }

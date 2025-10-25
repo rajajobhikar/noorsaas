@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface BotStatus {
   _id: string;
   name: string;
@@ -10,4 +12,9 @@ export interface BotStatus {
     interests: string[];
     trustLevel: "verified" | "fair" | "trusted";
   };
+  services?: {
+    name: string;
+    description: string;
+    verified: boolean;
+  }[];
 }
