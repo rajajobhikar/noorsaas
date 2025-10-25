@@ -20,6 +20,8 @@ export default async function BotProfile({
   return (
     <div className="p-6 space-y-6 max-w-xl mx-auto font-sans">
       <div className="flex items-center gap-4">
+        <BookBotButton botId={bot._id.toString()} />
+
         <div className="text-5xl">{bot.avatar ?? "🤖"}</div>
         <div>
           <h1 className="text-2xl font-bold">{bot.name}</h1>
@@ -32,7 +34,6 @@ export default async function BotProfile({
           </p>
         </div>
       </div>
-      <BookBotButton botId={bot._id.toString()} />
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Personality</h2>
         <p className="text-sm text-gray-700">

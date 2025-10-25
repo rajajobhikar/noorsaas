@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 
 export interface BotStatus {
   _id: string;
