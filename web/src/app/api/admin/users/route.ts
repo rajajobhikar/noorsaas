@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { users } from "@/lib-wkt3/authEngine/userStore";
 import { logAudit } from "@/lib-wkt3/wkt3db/auditLogStore";
+import clientPromise from "@/lib-wkt3/wkt3db/mongo";
+
 
 type InMemoryUser = {
   id: string;
@@ -12,8 +14,17 @@ type InMemoryUser = {
 };
 
 export async function GET() {
-  return NextResponse.json({ users });
+  const client = await clientPromise;
+  const db = client.db("users");
+  const users = await db.collection("profiles").find().toArray();
+
+  return NextResponse.json(users); // ✅ Must return an array
 }
+
+
+// export async function GET() {
+//   return NextResponse.json({ users });
+// }
 
 
 export async function POST(req: NextRequest) {

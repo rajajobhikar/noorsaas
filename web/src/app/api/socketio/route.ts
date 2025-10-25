@@ -1,7 +1,13 @@
 import { Server } from "socket.io";
-
 // ✅ Use edge runtime for streaming/polling compatibility
 export const runtime = "edge";
+
+
+interface BadgeUpdate {
+  userId: string;
+  badge: "verified" | "fair" | "trusted";
+}
+
 
 let io: Server | null = null;
 
@@ -22,12 +28,17 @@ export async function GET() {
         // Broadcast to all clients (or filter by role if needed)
         io?.emit("session_mirror", sessionData);
       });
+
+      socket.on("badge_update", (data: BadgeUpdate) => {
+        console.log("🏅 Badge update:", data);
+        io?.emit("badge_mirror", data);
+      });
+
       socket.on("audit_push", (data) => {
         console.log("📜 Audit received:", data);
         io?.emit("audit_update", data);
       });
     });
   }
-
   return new Response("Socket.IO server running");
 }
