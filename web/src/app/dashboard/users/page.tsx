@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useBadgeSocket } from "@/lib-wkt3/socket/hooks/useBadgeSocket";
+import Badge from "@/app/verify/badge/Badge";
 
 interface User {
   _id: string;
@@ -36,8 +37,9 @@ export default function UserDashboard() {
       <h1>Users</h1>
       <ul>
         {users.map((u) => (
-          <li key={u._id}>
-            {u.name ?? u._id} — {u.badge ?? "⛔ Unverified"}
+          <li key={u._id} className="flex items-center gap-2">
+            <span>{u.name ?? u._id}</span>
+            <Badge userId={u._id} />
           </li>
         ))}
       </ul>
