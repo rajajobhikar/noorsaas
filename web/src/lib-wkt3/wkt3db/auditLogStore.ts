@@ -22,7 +22,7 @@ export async function logAudit(entry: AuditLog) {
   // ✅ Emit to superadmin
   const io = (global as any).io;
   if (io) {
-    io.emit("new-audit", entry);
+    io.emit("audit_update", entry);
     console.log("📡 Emitted audit:", entry.context);
   }
 }

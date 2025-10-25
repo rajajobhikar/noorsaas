@@ -9,7 +9,7 @@ export default function LoginBlockPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push("/login");
-    }, 15000);
+    }, 7000);
     return () => clearTimeout(timer);
   }, [router]);
 
