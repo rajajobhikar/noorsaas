@@ -7,6 +7,13 @@ interface BadgeUpdate {
   userId: string;
   badge: "verified" | "fair" | "trusted";
 }
+interface BotUpdate {
+  _id: string;
+  name: string;
+  status: "online" | "offline" | "idle" | "busy";
+  task?: string;
+  lastPing: string;
+}
 
 
 let io: Server | null = null;
@@ -33,6 +40,12 @@ export async function GET() {
         console.log("🏅 Badge update:", data);
         io?.emit("badge_mirror", data);
       });
+
+      socket.on("bot_status", (data: BotUpdate) => {
+        console.log("🤖 Bot status update:", data);
+        io?.emit("bot_mirror", data);
+      });
+
 
       socket.on("audit_push", (data) => {
         console.log("📜 Audit received:", data);
