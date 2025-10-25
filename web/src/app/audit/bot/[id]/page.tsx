@@ -1,3 +1,4 @@
+import { calculateTrustScore } from "@/lib-wkt3/utils/trustScore";
 import clientPromise from "@/lib-wkt3/wkt3db/mongo";
 import { AuditLog } from "@/types/AuditLog";
 
@@ -13,11 +14,14 @@ export default async function AuditBotPage({
     .collection<AuditLog>("audit")
     .find({ botId: params.id })
     .sort({ timestamp: -1 })
-    .toArray();
+        .toArray();
+  const trustScore = calculateTrustScore(logs);
 
   return (
     <div className="p-6 space-y-4 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold">Audit Trail for Bot</h1>
+      <h2 className="text-lg font-semibold">Trust Score: {trustScore} / 100</h2>
+
       {logs.length === 0 ? (
         <p>No audit logs found</p>
       ) : (
