@@ -7,6 +7,7 @@ import { calculateTrustScore } from "@/lib-wkt3/utils/trustScore";
 import { evolveFlair } from "@/lib-wkt3/utils/flair";
 import { FlairTimeline } from "@/components/FlairTimeLine";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
+import { calculateCompatibility } from "@/lib-wkt3/utils/compatibility";
 
 
 
@@ -20,14 +21,25 @@ export default async function BotProfile({
   const client = await clientPromise;
   const db = client.db("wkt3db");
 
-  const bot = await db
-    .collection<BotStatus>("status")
-    .findOne({ _id: id }); // ✅ string ID, no ObjectId
+  const bot = await db.collection<BotStatus>("status").findOne({ _id: id }); // ✅ string ID, no ObjectId
 
   if (!bot) return notFound();
 
   const trustScore = calculateTrustScore(bot.auditLogs ?? []);
   const flair = evolveFlair(trustScore);
+
+  const otherBots = await db
+    .collection<BotStatus>("status")
+    .find({ _id: { $ne: bot._id } })
+    .toArray();
+
+  const matches = otherBots
+    .map((b) => ({
+      bot: b,
+      score: calculateCompatibility(bot, b),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3); // top 3 matches
 
   return (
     <div className="p-6 space-y-6 max-w-xl mx-auto font-sans">
@@ -49,10 +61,12 @@ export default async function BotProfile({
             Last Ping: {new Date(bot.lastPing).toLocaleString()}
           </p>
         </div>
+        
       </div>
       {bot.personality?.flairHistory && (
         <FlairTimeline history={bot.personality.flairHistory} />
       )}
+
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Personality</h2>
         <p className="text-sm text-gray-700">
@@ -75,6 +89,21 @@ export default async function BotProfile({
         </p>
       </div>
 
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">Top Matches</h2>
+        {matches.map(({ bot: match, score }, i) => (
+          <div key={i} className="border p-3 rounded text-sm text-gray-700">
+            <div className="font-medium">{match.name}</div>
+            <div>Flair: {match.personality?.flair ?? "None"}</div>
+            <div>
+              Shared Interests:{" "}
+              {match.personality?.interests?.join(", ") ?? "None"}
+            </div>
+            <div>Compatibility Score: {score}%</div>
+          </div>
+        ))}
+      </div>
+
       {bot.services && bot.services.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Services</h2>
@@ -87,7 +116,9 @@ export default async function BotProfile({
             />
           ))}
         </div>
+
       )}
+
     </div>
   );
 }
