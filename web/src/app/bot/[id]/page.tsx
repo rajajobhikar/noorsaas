@@ -5,6 +5,10 @@ import { BookBotButton } from "@/components/BookBotButton";
 import { BotStatus } from "@/types/Bot";
 import { calculateTrustScore } from "@/lib-wkt3/utils/trustScore";
 import { evolveFlair } from "@/lib-wkt3/utils/flair";
+import { FlairTimeline } from "@/components/FlairTimeLine";
+import { VerifiedBadge } from "@/components/VerifiedBadge";
+
+
 
 export default async function BotProfile({
   params,
@@ -32,6 +36,11 @@ export default async function BotProfile({
         <div className="text-5xl">{bot.avatar ?? "🤖"}</div>
         <div>
           <h1 className="text-2xl font-bold">{bot.name}</h1>
+          <h1 className="text-2xl font-bold flex items-center gap-2">
+            {bot.name}
+            <VerifiedBadge trustScore={trustScore} />
+          </h1>
+
           <p className="text-sm text-gray-600">
             Status: <span className="font-medium">{bot.status}</span> — Task:{" "}
             <span className="font-medium">{bot.task ?? "Idle"}</span>
@@ -41,7 +50,9 @@ export default async function BotProfile({
           </p>
         </div>
       </div>
-
+      {bot.personality?.flairHistory && (
+        <FlairTimeline history={bot.personality.flairHistory} />
+      )}
       <div className="space-y-2">
         <h2 className="text-lg font-semibold">Personality</h2>
         <p className="text-sm text-gray-700">
