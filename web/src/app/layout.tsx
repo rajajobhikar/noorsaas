@@ -3,7 +3,6 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import LanguageInitializer from "@/components/LanguageInitializer";
 import { getSessionUser } from "@/lib/session/getSession";
-import { UserContext } from "@/context/UserContext"; // ✅ Named import
 import SessionProvider from "@/components/SessionProvider";
 
 
