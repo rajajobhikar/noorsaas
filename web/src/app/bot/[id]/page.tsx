@@ -8,8 +8,7 @@ import { evolveFlair } from "@/lib-wkt3/utils/flair";
 import { FlairTimeline } from "@/components/FlairTimeLine";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
 import { calculateCompatibility } from "@/lib-wkt3/utils/compatibility";
-
-
+import { BookingAnalytics } from "@/components/BookingAnalytics";
 
 export default async function BotProfile({
   params,
@@ -61,7 +60,10 @@ export default async function BotProfile({
             Last Ping: {new Date(bot.lastPing).toLocaleString()}
           </p>
         </div>
-        
+
+        {bot.bookings && bot.bookings.length > 0 && (
+          <BookingAnalytics bookings={bot.bookings} />
+        )}
       </div>
       {bot.personality?.flairHistory && (
         <FlairTimeline history={bot.personality.flairHistory} />
@@ -116,9 +118,7 @@ export default async function BotProfile({
             />
           ))}
         </div>
-
       )}
-
     </div>
   );
 }

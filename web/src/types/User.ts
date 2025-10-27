@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import { FairnessData } from "@/types/fairness";
+import { AuditLog } from "./audit";
 
 type User = {
   _id?: ObjectId;
@@ -15,12 +16,16 @@ type User = {
   banned?: boolean;
   skillRating: number;
   serial: string;
-  role: "user" | "admin"|"superadmin" | "mod ";
+  role: "user" | "admin" | "superadmin" | "mod ";
   fairness: FairnessData;
+  flair?: string;
+  trustLevel?: string;
+  interests?: string[];
+  auditLogs?: AuditLog[];
   manualOverride?: {
   verified?: boolean;
   skillLevel?: "rookie" | "pro" | "legend";
-  role?: "user" | "admin" | "mod";
+    role?: "user" | "admin" | "mod";
   };
   createdAt?: number;
 };

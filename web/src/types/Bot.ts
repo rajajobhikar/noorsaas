@@ -11,6 +11,7 @@ export interface BotStatus {
   task?: string;
   lastPing: string;
   avatar?: string; // URL or emoji
+  bookings?: BookingEvent[];
   personality?: {
     flair?: string;
     interests?: string[];
@@ -23,4 +24,10 @@ export interface BotStatus {
     verified: boolean;
   }[];
   auditLogs?: import("@/types/AuditLog").AuditLog[];
+}
+
+export interface BookingEvent {
+  userId: string;
+  timestamp: string;
+  reason?: string;
 }
