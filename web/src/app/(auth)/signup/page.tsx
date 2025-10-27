@@ -31,8 +31,8 @@ export default function SignupPage() {
     const password = formData.get("password")?.toString();
     const confirm = formData.get("confirm")?.toString();
 
-    if (!name) {
-      setMessage("❌ Name is required");
+    if (!name || !email || !password || !confirm) {
+      setMessage("❌ All fields are required");
       return;
     }
 
@@ -41,26 +41,28 @@ export default function SignupPage() {
       return;
     }
 
-    const res = await fetch("/api/auth/signup", {
+    const res = await fetch("/api/auth/custom-register", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+        flair: "default", // ✅ required by backend, but hidden from UI
+        interests: [], // ✅ required by backend, but empty
+      }),
     });
 
-    if (res.ok && email) {
-      await fetch("/api/auth/send-verification", {
-        method: "POST",
-        body: JSON.stringify({ email }),
-        headers: { "Content-Type": "application/json" },
-      });
-      setMessage("✅ Account created. Please verify your email.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      form.reset(); // ✅ Clears all fields
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      setMessage("✅ Account created. You are now logged in.");
+      form.reset();
       setStrength(0);
-      // ✅ Auto-clear message after 5 seconds
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setTimeout(() => setMessage(""), 5000);
     } else {
-      const data = await res.json();
-      setMessage(`❌ ${data.error}`);
+      setMessage(`❌ ${data.error || "Signup failed"}`);
     }
   }
 
@@ -69,7 +71,13 @@ export default function SignupPage() {
       <QuoteHeader />
       <AuthModal>
         <div className="flex items-center justify-center mb-4">
-          <Image src="/bowler.jpg" alt="WKT3 Logo" height={100} width={100} priority />
+          <Image
+            src="/bowler.jpg"
+            alt="WKT3 Logo"
+            height={100}
+            width={100}
+            priority
+          />
           <h2 className="text-xl font-bold">Sign Up at wkt3.com</h2>
         </div>
         <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
@@ -146,7 +154,8 @@ export default function SignupPage() {
             </p>
           )}
         </form>
-        <SocialLogin/>
+
+        <SocialLogin />
       </AuthModal>
     </div>
   );
