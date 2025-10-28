@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import BotsClient from "./client"; // ✅ CSR component
 
 export default async function BotsPage() {
   const session = (await cookies()).get("wkt3-session")?.value;
@@ -8,8 +7,8 @@ export default async function BotsPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-xl font-bold mb-4">Your Bots</h1>
-      <BotsClient />
+      <h1 className="text-xl font-bold">Your Bots</h1>
+      {/* ✅ Secure content */}
     </div>
   );
 }
