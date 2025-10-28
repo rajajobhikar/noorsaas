@@ -19,28 +19,23 @@ export default function SignupPage() {
     if (/[^A-Za-z0-9]/.test(password)) score += 25;
     setStrength(score);
   }
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = formRef.current;
     if (!form) return;
-
     const formData = new FormData(form);
     const name = formData.get("name")?.toString();
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
     const confirm = formData.get("confirm")?.toString();
-
     if (!name || !email || !password || !confirm) {
       setMessage("❌ All fields are required");
       return;
     }
-
     if (password !== confirm) {
       setMessage("❌ Passwords do not match");
       return;
     }
-
     const res = await fetch("/api/auth/custom-register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,15 +43,19 @@ export default function SignupPage() {
         name,
         email,
         password,
-        flair: "default", // ✅ required by backend, but hidden from UI
-        interests: [], // ✅ required by backend, but empty
+        flair: "default",
+        interests: [],
       }),
     });
-
     const data = await res.json();
+    if (res.ok && data.success && email) {
+      await fetch("/api/auth/send-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
 
-    if (res.ok && data.success) {
-      setMessage("✅ Account created. You are now logged in.");
+      setMessage("✅ Account created. Please verify your email.");
       form.reset();
       setStrength(0);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -152,9 +151,8 @@ export default function SignupPage() {
             >
               {message}
             </p>
-          )}
+          )}  
         </form>
-
         <SocialLogin />
       </AuthModal>
     </div>

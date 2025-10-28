@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       name,
       email: email.toLowerCase(),
       password: hashed,
-      verified: true,
+      verified: false,
       role: "user",
       flair,
       interests,
@@ -80,15 +80,13 @@ export async function POST(req: NextRequest) {
         interests: newUser.interests,
       },
     });
-
-    response.cookies.set("wkt3-session", sessionId.toHexString(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
+    // response.cookies.set("wkt3-session", sessionId.toHexString(), {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   path: "/",
+    //   sameSite: "lax",
+    //   maxAge: 60 * 60 * 24 * 7,
+    // });
     console.log("✅ Custom user registered:", newUser.email);
     return response;
   } catch (err) {
