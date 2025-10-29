@@ -80,6 +80,7 @@ export async function POST(req: NextRequest) {
         interests: newUser.interests,
       },
     });
+    // response.cookies.set("wkt3-session", sessionId.toHexString(), {
     //   httpOnly: true,
     //   secure: process.env.NODE_ENV === "production",
     //   path: "/",
